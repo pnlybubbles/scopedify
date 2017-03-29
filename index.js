@@ -1,4 +1,4 @@
-const cssPrefix = require('postcss-prefix')
+const bindAttr = require('postcss-bind-attr')
 const nodeResolve = require('resolve')
 const mapLimit = require('map-limit')
 const postcss = require('postcss')
@@ -12,6 +12,8 @@ const path = require('path')
 
 module.exports = sheetify
 module.exports.getPrefix = getPrefix
+
+const PREFIX_PREFIX = '_scope_'
 
 // transform css
 // (str, str, obj?, fn) -> str
@@ -39,11 +41,24 @@ function sheetify (src, filename, options, done) {
   // only parse if in a browserify transform
   if (typeof filename === 'string') parseCss(src, filename, prefix, options, done)
 
-  return prefix
+  return function (node) {
+    bindPrefix(node, prefix)
+    return node
+  }
+}
+
+function bindPrefix (node, prefix) {
+  if (node.nodeType === 1 &&
+    !Array.from(node.attributes).some((v) => RegExp(`^${PREFIX_PREFIX}`).test(v.name))) {
+    node.setAttribute(prefix, '')
+    Array.from(node.childNodes).forEach((node) => {
+      bindPrefix(node, prefix)
+    })
+  }
 }
 
 function getPrefix (css) {
-  const prefix = '_' + crypto.createHash('md5')
+  const prefix = PREFIX_PREFIX + crypto.createHash('md5')
     .update(css.trim())
     .digest('hex')
     .slice(0, 8)
@@ -61,7 +76,7 @@ function parseCss (src, filename, prefix, options, done) {
   applyTransforms(filename, String(src), xtend(options), function (err, css) {
     if (err) return done(err)
     var p = postcss()
-    p = p.use(cssPrefix('.' + prefix))
+    if (!options.noscope) p = p.use(bindAttr(prefix))
 
     try {
       css = p.process(css).toString()

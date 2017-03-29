@@ -6,32 +6,40 @@ const path = require('path')
 const fs = require('fs')
 const vm = require('vm')
 const cssResolve = require('style-resolve').sync
+const jsdom = require('jsdom').jsdom()
+const domify = require('domify')
 
 const transform = require('../transform')
 const sheetify = require('..')
 
 test('prefix', function (t) {
-  t.test('should return a prefix when called in Node', function (t) {
+  t.test('should return a prefixer when called in Node', function (t) {
     t.plan(1)
-    const prefix = sheetify`.foo { color: blue; }`
+    const prefixer = sheetify`.foo { color: blue; }`
     const expected = sheetify.getPrefix('.foo { color: blue; }')
-    t.equal(prefix, expected, 'prefix is equal')
+    const node = domify('<main></main>', jsdom.defaultView.document)
+    prefixer(node)
+    t.equal(node.attributes[0].name, expected, 'prefix is equal')
   })
 
-  t.test('should return a prefix with relative path in Node', function (t) {
+  t.test('should return a prefixer with relative path in Node', function (t) {
     t.plan(1)
     const expath = path.join(__dirname, 'fixtures/prefix-import-source.css')
     const expected = sheetify.getPrefix(fs.readFileSync(expath, 'utf8'))
-    const prefix = sheetify('./fixtures/prefix-import-source.css')
-    t.equal(prefix, expected, 'prefix is equal')
+    const prefixer = sheetify('./fixtures/prefix-import-source.css')
+    const node = domify('<main></main>', jsdom.defaultView.document)
+    prefixer(node)
+    t.equal(node.attributes[0].name, expected, 'prefix is equal')
   })
 
-  t.test('should return a prefix with a module name in Node', function (t) {
+  t.test('should return a prefixer with a module name in Node', function (t) {
     t.plan(1)
     const expath = cssResolve('css-wipe')
     const expected = sheetify.getPrefix(fs.readFileSync(expath, 'utf8'))
-    const prefix = sheetify('css-wipe')
-    t.equal(prefix, expected, 'prefix is equal')
+    const prefixer = sheetify('css-wipe')
+    const node = domify('<main></main>', jsdom.defaultView.document)
+    prefixer(node)
+    t.equal(node.attributes[0].name, expected, 'prefix is equal')
   })
 
   t.test('should prefix and inline template strings', function (t) {
@@ -69,7 +77,7 @@ test('prefix', function (t) {
       vm.runInNewContext(src.toString(), c)
 
       function log (msg) {
-        t.equal(msg, '_f918f624', 'echoes prefix')
+        t.equal(msg, '_scope_f918f624', 'echoes prefix')
       }
     }
   })
@@ -109,7 +117,7 @@ test('prefix', function (t) {
       vm.runInNewContext(src.toString(), c)
 
       function log (msg) {
-        t.equal(msg, '_f918f624', 'echoes prefix')
+        t.equal(msg, '_scope_f918f624', 'echoes prefix')
       }
     }
   })

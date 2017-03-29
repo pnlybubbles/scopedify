@@ -1,4 +1,4 @@
-._75161010 .hello,._75161010 .world {
+:host .hello[_scope_75161010], :host .world[_scope_75161010] {
     -webkit-transform: translate(0, 0);
             transform: translate(0, 0);
   }

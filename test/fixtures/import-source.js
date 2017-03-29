@@ -1,3 +1,3 @@
 const sf = require('sheetify')
 
-sf('css-type-base')
+sf('css-type-base', { noscope: true })
