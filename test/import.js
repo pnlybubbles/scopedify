@@ -5,7 +5,7 @@ const test = require('tape')
 const path = require('path')
 const fs = require('fs')
 
-const sheetify = require(path.join(__dirname, '../transform'))
+const scopedify = require(path.join(__dirname, '../transform'))
 
 test('npm import', function (t) {
   t.test('should import npm packages', function (t) {
@@ -22,13 +22,13 @@ test('npm import', function (t) {
     const bOpts = { browserField: false }
     const bpath = path.join(__dirname, 'fixtures/import-source.js')
     browserify(bpath, bOpts)
-      .transform(sheetify)
+      .transform(scopedify)
       .transform(function (file) {
         return through(function (buf, enc, next) {
           const str = buf.toString('utf8')
           this.push(str
-            .replace(/sheetify\/insert/, 'insert-css')
-            .replace(/sheetify\/scope/, path.resolve(__dirname, '../scope')))
+            .replace(/scopedify\/insert/, 'insert-css')
+            .replace(/scopedify\/scope/, path.resolve(__dirname, '../scope')))
           next()
         })
       })
@@ -46,7 +46,7 @@ test('npm import', function (t) {
     const inpath = path.join(__dirname, 'fixtures/import-broken-source.js')
     const bOpts = { browserField: false }
     const b = browserify(inpath, bOpts)
-    b.transform(sheetify)
+    b.transform(scopedify)
 
     const r = b.bundle()
     r.resume()

@@ -1,12 +1,30 @@
-const sheetify = require('sheetify')
-const domify = require('domify')
-const prefix = sheetify('./index.css')
+const html = require('bel')
+const css = require('scopedify')
 
-document.body.appendChild(domify(`
-  <div class="${prefix}">
-    <h1>Styled</h1>
-  </div>
+const nestedScope = css('./nested.css')
+
+const nested = nestedScope(html`
+<div class="base">
+  <span class="title">inner</span>
+</div>
+`)
+
+const viewScope = css('./view.css')
+
+const view = viewScope(html`
+<main class="base">
+  <div class="title">outer</div>
+  ${nested}
   <div>
-    <h1>Unstyled</h1>
+    <div class="title">outer</div>
   </div>
-`))
+</main>
+`)
+
+css`
+:root div {
+  margin: 20px;
+}
+`
+
+document.body.appendChild(view)

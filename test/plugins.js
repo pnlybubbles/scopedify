@@ -5,7 +5,7 @@ const test = require('tape')
 const path = require('path')
 const fs = require('fs')
 
-const sheetify = require(path.join(__dirname, '../transform'))
+const scopedify = require(path.join(__dirname, '../transform'))
 
 test('plugins', function (t) {
   t.test('should transform CSS', function (t) {
@@ -22,15 +22,15 @@ test('plugins', function (t) {
     const bOpts = { browserField: false }
     const bpath = path.join(__dirname, 'fixtures/plugins-source.js')
     browserify(bpath, bOpts)
-      .transform(sheetify, {
+      .transform(scopedify, {
         use: [ [ 'sheetify-cssnext', { sourcemap: false } ] ]
       })
       .transform(function (file) {
         return through(function (buf, enc, next) {
           const str = buf.toString('utf8')
           this.push(str
-            .replace(/sheetify\/insert/, 'insert-css')
-            .replace(/sheetify\/scope/, path.resolve(__dirname, '../scope')))
+            .replace(/scopedify\/insert/, 'insert-css')
+            .replace(/scopedify\/scope/, path.resolve(__dirname, '../scope')))
           next()
         })
       })

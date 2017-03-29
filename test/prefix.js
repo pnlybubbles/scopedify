@@ -10,13 +10,13 @@ const jsdom = require('jsdom').jsdom()
 const domify = require('domify')
 
 const transform = require('../transform')
-const sheetify = require('..')
+const scopedify = require('..')
 
 test('prefix', function (t) {
   t.test('should return a prefixer when called in Node', function (t) {
     t.plan(1)
-    const prefixer = sheetify`.foo { color: blue; }`
-    const expected = sheetify.getPrefix('.foo { color: blue; }')
+    const prefixer = scopedify`.foo { color: blue; }`
+    const expected = scopedify.getPrefix('.foo { color: blue; }')
     const node = domify('<main></main>', jsdom.defaultView.document)
     prefixer(node)
     t.equal(node.attributes[0].name, expected, 'prefix is equal')
@@ -25,8 +25,8 @@ test('prefix', function (t) {
   t.test('should return a prefixer with relative path in Node', function (t) {
     t.plan(1)
     const expath = path.join(__dirname, 'fixtures/prefix-import-source.css')
-    const expected = sheetify.getPrefix(fs.readFileSync(expath, 'utf8'))
-    const prefixer = sheetify('./fixtures/prefix-import-source.css')
+    const expected = scopedify.getPrefix(fs.readFileSync(expath, 'utf8'))
+    const prefixer = scopedify('./fixtures/prefix-import-source.css')
     const node = domify('<main></main>', jsdom.defaultView.document)
     prefixer(node)
     t.equal(node.attributes[0].name, expected, 'prefix is equal')
@@ -35,8 +35,8 @@ test('prefix', function (t) {
   t.test('should return a prefixer with a module name in Node', function (t) {
     t.plan(1)
     const expath = cssResolve('css-wipe')
-    const expected = sheetify.getPrefix(fs.readFileSync(expath, 'utf8'))
-    const prefixer = sheetify('css-wipe')
+    const expected = scopedify.getPrefix(fs.readFileSync(expath, 'utf8'))
+    const prefixer = scopedify('css-wipe')
     const node = domify('<main></main>', jsdom.defaultView.document)
     prefixer(node)
     t.equal(node.attributes[0].name, expected, 'prefix is equal')
@@ -61,8 +61,8 @@ test('prefix', function (t) {
         return through(function (buf, enc, next) {
           const str = buf.toString('utf8')
           this.push(str
-            .replace(/sheetify\/insert/, 'insert-css')
-            .replace(/sheetify\/scope/, path.resolve(__dirname, '../scope')))
+            .replace(/scopedify\/insert/, 'insert-css')
+            .replace(/scopedify\/scope/, path.resolve(__dirname, '../scope')))
           next()
         })
       })
@@ -105,8 +105,8 @@ test('prefix', function (t) {
         return through(function (buf, enc, next) {
           const str = buf.toString('utf8')
           this.push(str
-            .replace(/sheetify\/insert/, 'insert-css')
-            .replace(/sheetify\/scope/, path.resolve(__dirname, '../scope')))
+            .replace(/scopedify\/insert/, 'insert-css')
+            .replace(/scopedify\/scope/, path.resolve(__dirname, '../scope')))
           next()
         })
       })

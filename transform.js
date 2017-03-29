@@ -7,11 +7,11 @@ const xtend = require('xtend')
 const path = require('path')
 const fs = require('fs')
 
-const sheetify = require('./index')
+const scopedify = require('./index')
 
 module.exports = transform
 
-// inline sheetify transform for browserify
+// inline scopedify transform for browserify
 // obj -> (str, opts) -> str
 function transform (filename, options) {
   if (/\.json$/i.test(filename)) return through()
@@ -48,7 +48,7 @@ function transform (filename, options) {
     var mname = null
     var ast
 
-    if (src.indexOf('sheetify') === -1) {
+    if (src.indexOf('scopedify') === -1) {
       self.push(src)
       self.push(null)
       return
@@ -74,7 +74,7 @@ function transform (filename, options) {
       if (node.type === 'CallExpression' &&
       node.callee && node.callee.name === 'require' &&
       node.arguments.length === 1 &&
-      node.arguments[0].value === 'sheetify') {
+      node.arguments[0].value === 'scopedify') {
         node.update('0')
         mname = node.parent.id.name
       }
@@ -134,7 +134,7 @@ function transform (filename, options) {
     }
   }
 
-  // iterate over nodes, and apply sheetify transformation
+  // iterate over nodes, and apply scopedify transformation
   // then replace the AST nodes with new values
   // (obj, fn) -> null
   function iterate (val, done) {
@@ -146,11 +146,11 @@ function transform (filename, options) {
     })
 
     function handleCss (val) {
-      sheetify(val.css, val.filename, val.opts, function (err, css, prefix) {
+      scopedify(val.css, val.filename, val.opts, function (err, css, prefix) {
         if (err) return done(err)
         const str = [
-          "((require('sheetify/insert')(" + JSON.stringify(css) + ')',
-          " || true) && require('sheetify/scope')(" + JSON.stringify(prefix) + '))'
+          "((require('scopedify/insert')(" + JSON.stringify(css) + ')',
+          " || true) && require('scopedify/scope')(" + JSON.stringify(prefix) + '))'
         ].join('')
 
         const lolSemicolon = (val.node.parent.type === 'VariableDeclarator')

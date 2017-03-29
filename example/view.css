@@ -1,0 +1,7 @@
+.base {
+  border: 3px solid #333;
+}
+
+.base .title {
+  border: 3px solid #f9f;
+}

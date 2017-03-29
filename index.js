@@ -9,14 +9,15 @@ const stackTrace = require('stack-trace')
 const cssResolve = require('style-resolve').sync
 const fs = require('fs')
 const path = require('path')
+
 const scope = require('./scope')
 
-module.exports = sheetify
+module.exports = scopedify
 module.exports.getPrefix = getPrefix
 
 // transform css
 // (str, str, obj?, fn) -> str
-function sheetify (src, filename, options, done) {
+function scopedify (src, filename, options, done) {
   // handle tagged template calls directly from Node
   const isTemplate = Array.isArray(src)
   if (isTemplate) src = src.join('')

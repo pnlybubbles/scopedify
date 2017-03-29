@@ -1,4 +1,4 @@
-const sf = require('sheetify')
+const sf = require('scopedify')
 
 const prefix = sf`:host .foo {
   color: blue;

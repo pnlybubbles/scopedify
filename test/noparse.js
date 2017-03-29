@@ -2,7 +2,7 @@ const transform = require('../transform')
 const from = require('from2-string')
 const test = require('tape')
 
-test('transform should not parse if sheetify is not in source', function (t) {
+test('transform should not parse if scopedify is not in source', function (t) {
   from('THIS SYNTAX IS INVALID')
     .pipe(transform('test.js'))
     .once('error', function (error) {
