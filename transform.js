@@ -120,6 +120,10 @@ function transform (filename, options) {
         ? xtend(opts, staticEval(node.arguments[1]))
         : opts
 
+      if (/\/node_modules\//.test(resolvePath)) {
+        iOpts.noscope = true
+      }
+
       const val = {
         filename: resolvePath,
         opts: iOpts,
