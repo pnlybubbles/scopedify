@@ -26,7 +26,9 @@ test('npm import', function (t) {
       .transform(function (file) {
         return through(function (buf, enc, next) {
           const str = buf.toString('utf8')
-          this.push(str.replace(/sheetify\/insert/, 'insert-css'))
+          this.push(str
+            .replace(/sheetify\/insert/, 'insert-css')
+            .replace(/sheetify\/scope/, path.resolve(__dirname, '../scope')))
           next()
         })
       })

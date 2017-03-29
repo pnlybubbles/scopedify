@@ -146,7 +146,7 @@ function transform (filename, options) {
         if (err) return done(err)
         const str = [
           "((require('sheetify/insert')(" + JSON.stringify(css) + ')',
-          ' || true) && ' + JSON.stringify(prefix) + ')'
+          " || true) && require('sheetify/scope')(" + JSON.stringify(prefix) + '))'
         ].join('')
 
         const lolSemicolon = (val.node.parent.type === 'VariableDeclarator')
