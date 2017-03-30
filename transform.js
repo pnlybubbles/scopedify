@@ -149,7 +149,7 @@ function transform (filename, options) {
       scopedify(val.css, val.filename, val.opts, function (err, css, prefix) {
         if (err) return done(err)
         const str = [
-          "((require('scopedify/insert')(" + JSON.stringify(css) + ')',
+          "((require('insert-css')(" + JSON.stringify(css) + ')',
           " || true) && require('scopedify/scope')(" + JSON.stringify(prefix) + '))'
         ].join('')
 
