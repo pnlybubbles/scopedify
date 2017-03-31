@@ -1,6 +1,6 @@
 {
   "name": "scopedify",
-  "version": "1.0.1",
+  "version": "1.1.0",
   "description": "Scoped modular CSS bundler",
   "license": "MIT",
   "scripts": {
@@ -24,7 +24,7 @@
     "insert-css": "^2.0.0",
     "map-limit": "0.0.1",
     "postcss": "^5.0.10",
-    "postcss-bind-attr": "^1.0.0",
+    "postcss-bind-attr": "^1.0.1",
     "resolve": "^1.1.7",
     "stack-trace": "0.0.9",
     "static-eval": "^1.1.0",

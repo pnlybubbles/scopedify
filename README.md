@@ -90,6 +90,68 @@ const tree = treeScope(html`
 document.body.appendChild(tree)
 ```
 
+Rendered html:
+```html
+<section class="base" _scope_b29bc9f1>
+  <h1 _scope_b29bc9f1>Red Bordered</h1>
+  <p class="base" _scope_43e26b4d>
+    <h1 _scope_43e26b4d>Blue background, no border</h1>
+  </p>
+</section>
+```
+
+## Multiple namespace
+
+If the given html is already scoped, the new scope will be added to nodes which has same scope as root in given html.
+
+```js
+const css = require('scopedify')
+const html = require('bel')
+
+const componentScope = css`
+  .base h1 {
+    background-color: #aaf;
+  }
+`
+
+const component = componentScope(html`
+  <p class="base">
+    <h1>Blue background, no border</h1>
+  </p>
+`)
+
+const Scope1 = css`
+  .base h1 {
+    border: solid 4px #faa;
+  }
+`
+
+const Scope2 = css`
+  .base h1 {
+    transform: scale(0.5);
+  }
+`
+
+const tree = Scope2(Scope1(html`
+  <section class='base'>
+    <h1>Red Bordered</h1>
+    ${component}
+  </section>
+`))
+
+document.body.appendChild(tree)
+```
+
+Rendered html:
+```
+<section class="base" _scope_b29bc9f1 _scope_136a89ad>
+  <h1 _scope_b29bc9f1 _scope_136a89ad>Red Bordered</h1>
+  <p class="base" _scope_43e26b4d>
+    <h1 _scope_43e26b4d>Blue background, no border</h1>
+  </p>
+</section>
+```
+
 ## External files
 To include an external CSS file you can pass a path to scopedify as
 `scopedify('./my-file.css')`:
