@@ -100,7 +100,7 @@ Rendered html:
 </section>
 ```
 
-## Multiple namespace
+## Multiple namespaces
 
 If the given html is already scoped, the new scope will be added to nodes which has same scope as root in given html.
 
