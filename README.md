@@ -143,7 +143,7 @@ document.body.appendChild(tree)
 ```
 
 Rendered html:
-```
+```html
 <section class="base" _scope_b29bc9f1 _scope_136a89ad>
   <h1 _scope_b29bc9f1 _scope_136a89ad>Red Bordered</h1>
   <p class="base" _scope_43e26b4d>
