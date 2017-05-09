@@ -1,7 +1,7 @@
 # scopedify
 [![js-standard-style][standard-image]][standard-url]
 
-Scoped modular CSS bundler for browserify. (folked from [sheetify](https://github.com/stackcss/sheetify))
+Scoped modular CSS bundler for browserify. (forked from [sheetify](https://github.com/stackcss/sheetify))
 
 Works with [npm](http://npmjs.org/) modules
 like [browserify](http://browserify.org/) does.
